@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 if [ -z "$1" ] 
 then
 	echo "$0 requires script to run as first argument"
