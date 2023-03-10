@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+#PBS -l mem=512gb
+#PBS -l nodes=1:ppn=28
+
+cd $W
+kma -ipe $F1 $F2 -o ${FS}.vr.kma -t_db /home/bbrow6/JGI/IMG_VR_2022-09-20_6.1/KMA_db/IMGVR_all_nucleotides-high_confidence_KMA_formatted.comp -t 28 -1t1 -mem_mode -and -apm f
