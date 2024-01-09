@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+#PBS -l mem=12gb
+#PBS -l nodes=1:ppn=12
+#PBS -q paidq 
+#PBS -P a675a67f-9204-4f66-9785-891b95c7d3da
+
+/home/bmaust/local/bbmap/bbmap.sh ref=/home/bmaust/ncbi/hg19_virus_masked.fa in1=$F1 in2=$F2 -outu=${FS}.nohu.fq
+
