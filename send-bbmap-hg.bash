@@ -9,9 +9,10 @@ fi
 for F in *R1_trim.fastq.gz
 do
 	export F1=$F
-	export F2=${F1%%_R1.trim.fastq.gz}_R2.trim.fastq.gz
+	export F2=${F1%%_R1_trim.fastq.gz}_R2_trim.fastq.gz
 	FB=$(basename $F)
 	export FS=${FB%%_L001_R1_trim.fastq.gz}
-	echo qsub -N "bbmap_hu_$FS" -e "$HOME/v-virome/bbmap_hu_${FS}.err" -o "$HOME/v-virome/bbmap_hu_${FS}.out" -q paidq -P $(project code Viromics) -V $1 $F1 $F2 $FS
+	export WHERE=$PWD
+	qsub -N "bbmap_hu_$FS" -e "bbmap_hu_${FS}.err" -o "bbmap_hu_${FS}.out" -q paidq -P $(project code Viromics) -V $1 
 done
 
