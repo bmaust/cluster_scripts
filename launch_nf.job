@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+#SBATCH -q public
+#SBATCH -p general
+#SBATCH -N 1
+#SBATCH -c 4
+#SBATCH -t 5-12:00:00
+#SBATCH --mem=8G
+#SBATCH -o slurm.nextflow.%j.out
+#SBATCH -e slurm.nextflow.%j.err
+
+module load openjdk-17.0.3_7-gcc-12.1.0
+
+nextflow run $S $NF_ARGS 
