@@ -7,6 +7,7 @@ process picard_bts {
 
 	input: 
 		val(basecall_dir)
+		path(barcode_out)
 	output:
 		tuple val(index_sample), path("${index_sample}.bam")
 
@@ -26,19 +27,24 @@ process picard_bts {
 
 process picard_extractBarcodes {
 	cpus 64
-	memory '64 GB'
-	time '6h'
+	memory '512 GB'
+	time '1h'
 
+	publishDir "picard_out"
 	input:
-		path(basecall_dir)
+		val(basecall_dir)
 	
+	output:
+	 	path "metrics_output.txt"
 	"""
-	java -jar ${params.picard_path} \
+	echo "removing previous barcode calls"
+	rm ${basecall_dir}/s_*_barcode.txt
+	java -Xmx300g -jar ${params.picard_path} \
 	ExtractIlluminaBarcodes \
 	LANE=001 NUM_PROCESSORS=0 \
         BASECALLS_DIR= ${basecall_dir} \
         READ_STRUCTURE= ${params.picard_read_str} \
-	BARCODE_FILE=barcodes.txt \
+	BARCODE_FILE=${params.picard_barcodes_file} \
 	METRICS_FILE=metrics_output.txt
 	"""
 }
@@ -57,7 +63,8 @@ uniq -c ${index_sample}-umi.sort.txt > ${index_sample}-umi.uniq.txt
 
 workflow {
 	// println "Running workflow for ${params.basecall_dir}"
+	picard_extractBarcodes("${params.basecall_dir}")
 
 	println "Generating basecalls for ${params.basecall_dir}"
-	def sams = picard_bts("${params.basecall_dir}")	
+	def sams = picard_bts("${params.basecall_dir}", picard_extractBarcodes.out)	
 }
