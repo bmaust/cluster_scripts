@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH -q public
+#SBATCH -p general
+#SBATCH -N 1
+#SBATCH -c 32
+#SBATCH -t 0-12:00:00
+#SBATCH --mem=64G
+#SBATCH -o slurm.bbmap.%j.out
+#SBATCH -e slurm.bbmap.%j.err
+
+cd $WHERE
+[ -f $FS.fastq ] || samtools fastq -T RX $F1 > $FS.fastq
+/home/bmaust/local/bbmap_39.06/bbmap.sh ref=/home/bmaust/human_virus-masked.fasta in=$FS.fastq qtrim=rl trimq=20 keepnames=T outm=${FS}_humap.bam outu=${FS}_nohu.fastq statsfile=${FS}_hu_refstats
